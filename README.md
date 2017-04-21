@@ -1,7 +1,7 @@
 # Lattice-Based-PAKE-Key-Exchange
 
 ## Introduction
-> This project implement Lattice Based PAKE Key Exchange based on 
+This project implement Lattice Based PAKE Key Exchange based on 
 
 ## Project Structure
 ```
