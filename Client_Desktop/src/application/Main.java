@@ -33,7 +33,7 @@ public class Main extends Application {
 	private static Client paper;
 	private static Stage primaryStage;
 	private static HttpUtil httppost;
-	    
+		
 	@Override
 	public void start(Stage primaryStage)
 	{
@@ -41,7 +41,7 @@ public class Main extends Application {
 			Main.primaryStage = primaryStage;
 			Main.primaryStage.setTitle("AddressApp");
 			
-	        setOverView();
+			setOverView();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -50,34 +50,34 @@ public class Main extends Application {
 	
 	public void setOverView()
 	{
-        try {
-    		primaryStage = new Stage();
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/Overview.fxml"));
-            
-            AnchorPane overview = (AnchorPane) loader.load();
-            Scene scene = new Scene(overview);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-           
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+		try {
+			primaryStage = new Stage();
+			FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/Overview.fxml"));
+			
+			AnchorPane overview = (AnchorPane) loader.load();
+			Scene scene = new Scene(overview);
+			primaryStage.setScene(scene);
+			primaryStage.show();
+		   
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public void setNextView()
 	{
-        try {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/Nextview.fxml"));
-            
-            AnchorPane overview = (AnchorPane) loader.load();
-            Scene scene = new Scene(overview);
-            
-            primaryStage.setScene(scene);
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+		try {
+			FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/Nextview.fxml"));
+			
+			AnchorPane overview = (AnchorPane) loader.load();
+			Scene scene = new Scene(overview);
+			
+			primaryStage.setScene(scene);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public static void main(String[] args)
 	{
