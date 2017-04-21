@@ -16,31 +16,31 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "PublicKey", urlPatterns = { "/publickey" })
 public class PublicKey extends HttpServlet {
 
-	@Override
-	protected void doGet(
-			HttpServletRequest req,
-			HttpServletResponse resp)
-			throws ServletException,
-					IOException 
-	{
-		ServletContext servletContext = getServletContext();
+    @Override
+    protected void doGet(
+            HttpServletRequest req,
+            HttpServletResponse resp)
+            throws ServletException,
+                    IOException 
+    {
+        ServletContext servletContext = getServletContext();
 
-		File pkfile = new File(servletContext.getRealPath("/download/pubKey"));
-		resp.reset();
-		resp.setContentType("application/octet-stream");
-		String encodingFilename = new String("public key");
-		System.out.println("encodingFilename:" + encodingFilename);
-		resp.setHeader("content-disposition", "attachment;filename=" + encodingFilename);
-		InputStream in = new FileInputStream(pkfile);
-		OutputStream out = resp.getOutputStream();
-		byte[] b = new byte[1024];
-		int n = 0;
-		while ((n = in.read(b)) != -1) {
-			out.write(b, 0, n);
-		}
-		out.flush();
-		in.close();
-		out.close();
+        File pkfile = new File(servletContext.getRealPath("/download/pubKey"));
+        resp.reset();
+        resp.setContentType("application/octet-stream");
+        String encodingFilename = new String("public key");
+        System.out.println("encodingFilename:" + encodingFilename);
+        resp.setHeader("content-disposition", "attachment;filename=" + encodingFilename);
+        InputStream in = new FileInputStream(pkfile);
+        OutputStream out = resp.getOutputStream();
+        byte[] b = new byte[1024];
+        int n = 0;
+        while ((n = in.read(b)) != -1) {
+            out.write(b, 0, n);
+        }
+        out.flush();
+        in.close();
+        out.close();
 
-	}
+    }
 }
