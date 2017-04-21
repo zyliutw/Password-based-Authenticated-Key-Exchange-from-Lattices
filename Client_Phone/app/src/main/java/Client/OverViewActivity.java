@@ -32,8 +32,8 @@ public class OverViewActivity extends AppCompatActivity {
     private SubmitListener submitListener;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
+    protected void onCreate(Bundle savedInstanceState) 
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
@@ -61,9 +61,11 @@ public class OverViewActivity extends AppCompatActivity {
     }
 
 
-    class SubmitListener implements View.OnClickListener {
-        public void onClick(View v) {
-
+    class SubmitListener implements View.OnClickListener 
+    {
+        public void onClick(
+                View v)
+        {
             log.setText("");
             ssk.setText("");
             time.setText("");
@@ -114,7 +116,10 @@ public class OverViewActivity extends AppCompatActivity {
             }
         }
 
-        public void set_do_X_Authc_Post_return(String input) throws IOException {
+        public void set_do_X_Authc_Post_return(
+                String input) 
+                throws IOException 
+        {
             String[] s = input.split("!");
             String[] ws_sp = s[0].split(":");
             String[] Y_sp = s[1].split(":");

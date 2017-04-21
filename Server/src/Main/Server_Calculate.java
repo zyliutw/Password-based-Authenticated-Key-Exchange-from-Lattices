@@ -61,17 +61,18 @@ public class Server_Calculate {
 
 	
 	
-	public Server_Calculate() {
+	public Server_Calculate() 
+	{
 		idc_pw_map = new HashMap<String, String>();
 		idc_pw_map.put("client1", "client1");
 		idc_pw_map.put("client2", "client2");
 		idc_pw_map.put("client3", "client3");
 		idc_pw_map.put("client4", "client4");
-		
-		
 	}
 
-	public Boolean checkpw(String idc, String pw){
+
+	public Boolean checkpw(String idc, String pw)
+	{
 		if(!idc_pw_map.containsKey(idc)){
 			return false;
 		} else{
@@ -81,11 +82,15 @@ public class Server_Calculate {
 				return true;
 			}
 		}
-		
 	}
-	@SuppressWarnings("unchecked")
-	public void init(String pw, String idc, ArrayList<Integer> X) {
 
+
+	@SuppressWarnings("unchecked")
+	public void init(
+			String pw,
+			String idc,
+			ArrayList<Integer> X)
+	{
 		q = new BigInteger("40961");
 		SecureRandom random = new SecureRandom();
 		int n = 256;
@@ -107,28 +112,41 @@ public class Server_Calculate {
 			x_arraylist.add(e);
 		}
 		this.X = new PolyModElement<Element>(Rq, x_arraylist);
-
 	}
 
-	public String getAuthcHash(String input) {
+
+	public String getAuthcHash(
+			String input)
+	{
 		return input.substring(0, 64);
 	}
 
-	public void setNonce(String input) {
-		String nonce = input.substring(64, input.length());
 
+	public void setNonce(
+			String input)
+	{
+		String nonce = input.substring(64, input.length());
 		Nonce = nonce;
 	}
 
-	// --------------
-	public void checkAuthcAndDec(InputStream pk, long pklen, DataInputStream enFile) throws IOException, NtruException {
 
+	public void checkAuthcAndDec(
+			InputStream pk,
+			long pklen,
+			DataInputStream enFile)
+			throws IOException,
+					NtruException 
+	{
 		NtruEncryptKey privKey = loadKey(pk, pklen);
 		client_Authc = decrypt(privKey, enFile);
 		setNonce(client_Authc);
 	}
 
-	public Boolean checkHashValue() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
+	public Boolean checkHashValue() 
+			throws NoSuchAlgorithmException,
+					UnsupportedEncodingException 
+	{
 		md = MessageDigest.getInstance("SHA-256");
 
 		String X_idc_pw_nonce = "" + X.toString() + idc + pw + Nonce + Integer.toString(g);
@@ -142,15 +160,12 @@ public class Server_Calculate {
 				hexString.append('0');
 			hexString.append(hex);
 		}
-		if (hexString.toString().equals(client_Authc.substring(0, 64))) {
-			return true;
-		} else
-			return false;
-
+		return hexString.toString().equals(client_Authc.substring(0, 64));
 	}
 
-	public ArrayList<Integer> serverCalY() {
 
+	public ArrayList<Integer> serverCalY() 
+	{
 		Element tmp_fs = sampler.sample();
 		Element tmp_beta = sampler.sample();
 
@@ -171,8 +186,10 @@ public class Server_Calculate {
 		return c;
 	}
 
-	public ArrayList<Integer> serverCalws() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-
+	public ArrayList<Integer> serverCalws() 
+			throws NoSuchAlgorithmException,
+					UnsupportedEncodingException 
+	{
 		Element tmp_rs = sampler.sample();
 		rs = new PolyModElement<Element>(Rq);
 		rs.set(tmp_rs);
@@ -187,8 +204,11 @@ public class Server_Calculate {
 		return ws;
 	}
 
-	public String serverCalsks() throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
+	public String serverCalsks() 
+			throws NoSuchAlgorithmException,
+					UnsupportedEncodingException 
+	{
 		String rhos = Extr(Ks, ws);
 
 		md = MessageDigest.getInstance("SHA-256");
@@ -207,7 +227,10 @@ public class Server_Calculate {
 
 	}
 
-	public String serverCalAuths() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public String serverCalAuths() 
+			throws NoSuchAlgorithmException,
+					UnsupportedEncodingException 
+	{
 
 		md = MessageDigest.getInstance("SHA-256");
 		String Y_IDs_pw_ws_Nonce_plus1 = "" + Y.toString() + ids + pw + ws.toString() + Nonce + 1;
@@ -226,8 +249,10 @@ public class Server_Calculate {
 
 	}
 
-	// -------------------
-	static OID parseOIDName(String requestedOid) {
+
+	static OID parseOIDName(
+			String requestedOid) 
+	{
 		try {
 			return OID.valueOf(requestedOid);
 		} catch (IllegalArgumentException e) {
@@ -239,7 +264,9 @@ public class Server_Calculate {
 		return null;
 	}
 
-	static Random createSeededRandom() {
+
+	static Random createSeededRandom() 
+	{
 		byte seed[] = new byte[32];
 		java.util.Random sysRand = new java.util.Random();
 		sysRand.nextBytes(seed);
@@ -247,8 +274,13 @@ public class Server_Calculate {
 		return prng;
 	}
 
-	public static NtruEncryptKey loadKey(InputStream in, long pklen) throws IOException, NtruException {
 
+	public static NtruEncryptKey loadKey(
+			InputStream in,
+			long pklen) 
+			throws IOException,
+					NtruException 
+	{
 		byte buf[] = new byte[(int) pklen];
 		in.read(buf);
 		in.close();
@@ -257,7 +289,13 @@ public class Server_Calculate {
 		return k;
 	}
 
-	public static String decrypt(NtruEncryptKey ntruKey, DataInputStream in) throws IOException, NtruException {
+
+	public static String decrypt(
+			NtruEncryptKey ntruKey,
+			DataInputStream in) 
+			throws IOException,
+					NtruException 
+	{
 		byte[] output = null;
 		byte ivBytes[] = new byte[in.readInt()];
 		in.readFully(ivBytes);
@@ -284,8 +322,10 @@ public class Server_Calculate {
 		return new String(output, "UTF-8");
 	}
 
-	private static ArrayList<Integer> Signal_function(Element input) {
 
+	private static ArrayList<Integer> Signal_function(
+			Element input) 
+	{
 		ArrayList<Integer> out = new ArrayList<>(2);
 
 		double left = -1 * Math.floor(q.intValue() / 4);
@@ -305,7 +345,10 @@ public class Server_Calculate {
 		return out;
 	}
 
-	private static String Extr(Element K, ArrayList<Integer> ws) {
+	private static String Extr(
+			Element K,
+			ArrayList<Integer> ws)
+	{
 		String out = "";
 
 		Vector k = (Vector) K;
@@ -319,7 +362,11 @@ public class Server_Calculate {
 		return out;
 	}
 
-	public void serverGenKey() throws IOException, NtruException {
+
+	public void serverGenKey() 
+			throws IOException,
+					NtruException
+	{
 		String pubkeyFile = "./pubKey";
 		String privkeyFile = "./privKey";
 		String oidstring = "ees1499ep1";

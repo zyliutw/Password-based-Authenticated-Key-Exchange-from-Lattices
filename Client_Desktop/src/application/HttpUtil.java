@@ -21,11 +21,15 @@ public class HttpUtil {
 	HttpClient client;
 	
 	public HttpUtil(){
-		 
          client = HttpClientBuilder.create().build();
 	}
 	
-	public String do_X_Authc_Post(String idc, String pw) throws ClientProtocolException, IOException {
+	public String do_X_Authc_Post(
+            String idc,
+            String pw) 
+            throws ClientProtocolException,
+                    IOException 
+    {
 		HttpPost post = new HttpPost( url );  
 		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 

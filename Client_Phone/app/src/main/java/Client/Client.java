@@ -1,11 +1,9 @@
 package Client;
 import android.content.Context;
 import android.content.ContextWrapper;
-
 import com.securityinnovation.jNeo.NtruException;
 import com.securityinnovation.jNeo.Random;
 import com.securityinnovation.jNeo.ntruencrypt.NtruEncryptKey;
-
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,12 +15,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
-
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Field;
 import it.unisa.dia.gas.jpbc.Sampler;
@@ -36,53 +32,47 @@ import it.unisa.dia.gas.plaf.jpbc.field.z.SymmetricZrField;
 public class Client extends ContextWrapper {
 
     private static BigInteger q;
-
-
-    // client
     private PolyModElement<Element> X;
     private PolyModElement<Element> alpha;
     private PolyModElement<Element> Nonce;
-    private String idc;
-
-    // server
     private PolyModElement<Element> Y;
+    private PolyModField<Field<Element>> Rq;
+    private String idc;
     private String ids;
-
-
-    // share
+    private String Auths;
+    private String pw;
     private ArrayList<Integer> ws;
     private int g;
-    private String pw;
-
-
-    private PolyModField<Field<Element>> Rq;
     private Sampler sampler;
-    private String Auths;
 
-    public Client(Context base) {
+    public Client(Context base) 
+    {
         super(base);
     }
 
-    static Random createSeededRandom() {
+
+    static Random createSeededRandom() 
+    {
         byte seed[] = new byte[32];
         java.util.Random sysRand = new java.util.Random();
         sysRand.nextBytes(seed);
         return new Random(seed);
     }
 
+
     private static void encrypt(
             NtruEncryptKey ntruKey,
             Random prng,
             String hashstring,
             String outFileName)
-            throws IOException, NtruException {
-
+            throws IOException,
+                    NtruException
+    {
         byte buf[] = hashstring.getBytes();
-
-
         byte ivBytes[] = null;
         byte encryptedBuf[] = null;
         byte wrappedAESKey[] = null;
+
         try {
             // Get an AES key
             KeyGenerator keygen = KeyGenerator.getInstance("AES");
@@ -123,10 +113,14 @@ public class Client extends ContextWrapper {
         fileOS.close();
     }
 
-    private static String Extr(Element K, ArrayList<Integer> ws) {
-        String out = "";
 
+    private static String Extr(
+            Element K, 
+            ArrayList<Integer> ws) 
+    {
+        String out = "";
         Vector k = (Vector) K;
+
         for (int i = 0; i < k.getSize(); i++) {
             int a = ((Integer.parseInt(k.getAt(i).toString()) + ws.get(i) * (q.intValue() - 1) / 2) % q.intValue()) % 2;
             if (a == -1) a = 1;
@@ -135,9 +129,13 @@ public class Client extends ContextWrapper {
         return out;
     }
 
-    public void init(String pw, String idc, int g, String ids) {
 
-
+    public void init(
+            String pw,
+            String idc,
+            int g,
+            String ids)
+    {
         q = new BigInteger("40961");
 
         SecureRandom random = new SecureRandom();
@@ -153,9 +151,11 @@ public class Client extends ContextWrapper {
         this.ids = ids;
     }
 
-    // --------------
-    public ArrayList<Integer> clientCalX() throws IOException, ClassNotFoundException {
 
+    public ArrayList<Integer> clientCalX()
+            throws IOException,
+                    ClassNotFoundException 
+    {
         Element tmp_fc = sampler.sample();
         Element tmp_alpha = sampler.sample();
         Element tmp_Nonce = sampler.sample();
@@ -184,12 +184,14 @@ public class Client extends ContextWrapper {
         return c;
     }
 
-    public void clientCalAuthcandEnc() throws IOException, NoSuchAlgorithmException, NtruException {
 
-
+    public void clientCalAuthcandEnc() 
+            throws IOException,
+                    NoSuchAlgorithmException,
+                    NtruException 
+    {
         String X_idc_pw_nonce = "" + X.toString() + idc + pw + Nonce.toString() + Integer.toString(g);
         String hexString = getHash(X_idc_pw_nonce);
-
 
         Random prng = createSeededRandom();
         NtruEncryptKey pubKey = loadKey("pubKey");
@@ -197,17 +199,22 @@ public class Client extends ContextWrapper {
 
         encrypt(pubKey, prng, toEnc, getFilesDir().getPath() + "/encry");
 
-
     }
+    
 
-    public void set_ws_stream_string(ArrayList<Integer> s) throws IOException {
+    public void set_ws_stream_string(
+            ArrayList<Integer> s) 
+            throws IOException 
+    {
         ws = new ArrayList<>(s);
     }
 
-    public void set_Y_stream_string(ArrayList<Integer> s) throws IOException {
+
+    public void set_Y_stream_string(
+            ArrayList<Integer> s) 
+            throws IOException 
+    {
         ArrayList<Integer> Y_data = new ArrayList<>(s);
-
-
         List<Element> Y_arraylist = new ArrayList<>();
         for (Integer x : Y_data) {
             Element e = Rq.getTargetField().newElement();
@@ -216,25 +223,29 @@ public class Client extends ContextWrapper {
         }
 
         Y = new PolyModElement<>(Rq, Y_arraylist);
-
     }
 
-    public void set_Auths(String s) {
+    public void set_Auths(
+            String s) 
+    {
         Auths = s;
     }
 
-    // ---------------
-    public Boolean clientCheckAuths() throws NoSuchAlgorithmException, IOException {
 
-
+    public Boolean clientCheckAuths() 
+            throws NoSuchAlgorithmException,
+                    IOException 
+    {
         String Y_IDs_pw_ws_Nonce_plus1 = "" + Y.toString() + ids + pw + ws.toString() + Nonce.toString() + 1;
         String hexString = getHash(Y_IDs_pw_ws_Nonce_plus1);
-
         return Auths.equals(hexString);
     }
 
-    public String clientCalKcAndskc() throws NoSuchAlgorithmException, IOException {
 
+    public String clientCalKcAndskc() 
+            throws NoSuchAlgorithmException,
+                    IOException 
+    {
         PolyModElement<Element> rc;
         Element tmp_rc = sampler.sample();
         rc = new PolyModElement<>(Rq);
@@ -244,8 +255,6 @@ public class Client extends ContextWrapper {
         PolyModElement<Element> t_Y = Y.duplicate();
         PolyModElement<Element> t_rc = rc.duplicate();
 
-
-
         PolyModElement<Element> Kc = t_alpha.mul(t_Y).add(t_rc.mul(2));
         String rhoc = Extr(Kc, ws);
 
@@ -254,8 +263,12 @@ public class Client extends ContextWrapper {
         return getHash(IDc_IDs_X_Y_ws_Nonce_rhos);
     }
 
-    private NtruEncryptKey loadKey(String keyFileName) throws IOException, NtruException {
 
+    private NtruEncryptKey loadKey(
+            String keyFileName) 
+            throws IOException,
+                    NtruException 
+    {
         InputStream in = getAssets().open(keyFileName);
 
         byte buf[] = new byte[in.available()];
@@ -266,8 +279,12 @@ public class Client extends ContextWrapper {
         return k;
     }
 
-    private String getHash(String input) throws IOException, NoSuchAlgorithmException {
 
+    private String getHash(
+            String input) 
+            throws IOException,
+                    NoSuchAlgorithmException 
+    {
         MessageDigest md;
         md = MessageDigest.getInstance("SHA-256");
 
@@ -282,7 +299,6 @@ public class Client extends ContextWrapper {
             }
             hexString.append(hex);
         }
-
         return hexString.toString();
     }
 }

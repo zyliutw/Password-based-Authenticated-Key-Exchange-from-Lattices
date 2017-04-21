@@ -24,7 +24,11 @@ public class HttpUtil extends ContextWrapper {
         client = HttpClientBuilder.create().build();
     }
 
-    public String do_X_Authc_Post(String idc, String pw) throws IOException {
+    public String do_X_Authc_Post(
+            String idc,
+            String pw) 
+            throws IOException 
+    {
         String url = "http://127.0.0.1:8080/Server/index";
         HttpPost post = new HttpPost(url);
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();

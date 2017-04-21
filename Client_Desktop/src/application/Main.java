@@ -35,9 +35,8 @@ public class Main extends Application {
 	private static HttpUtil httppost;
 	    
 	@Override
-	public void start(Stage primaryStage) {
-		
-		
+	public void start(Stage primaryStage)
+	{
 		try {
 			Main.primaryStage = primaryStage;
 			Main.primaryStage.setTitle("AddressApp");
@@ -49,7 +48,8 @@ public class Main extends Application {
 	}
 	
 	
-	public void setOverView() {
+	public void setOverView()
+	{
         try {
     		primaryStage = new Stage();
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/Overview.fxml"));
@@ -64,7 +64,8 @@ public class Main extends Application {
         }
     }
 	
-	public void setNextView() {
+	public void setNextView()
+	{
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/Nextview.fxml"));
             
@@ -72,22 +73,28 @@ public class Main extends Application {
             Scene scene = new Scene(overview);
             
             primaryStage.setScene(scene);
-           
             
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 	
-	public static void main(String[] args) {
-
+	public static void main(String[] args)
+	{
 		paper = new Client();
 		httppost = new HttpUtil();
 		launch(args);
 	}
 	
 	@FXML
-	public void submit(ActionEvent event) throws ClassNotFoundException, IOException, NoSuchAlgorithmException, NtruException, InterruptedException{
+	public void submit(
+			ActionEvent event) 
+			throws ClassNotFoundException,
+					IOException,
+					NoSuchAlgorithmException,
+					NtruException,
+					InterruptedException
+	{
 		log_label.setText("");
 		ssk_label.setText("");
 		time_label.setText("");
@@ -133,51 +140,48 @@ public class Main extends Application {
 	
 	
 	
-	public void set_do_X_Authc_Post_return(String input) throws IOException{
+	public void set_do_X_Authc_Post_return(
+			String input) 
+			throws IOException
+	{
 		String [] s = input.split("!");
 		String [] ws_sp = s[0].split(":");
 		String [] Y_sp = s[1].split(":");
 		String [] Auths_sp = s[2].split(":");
 		
 		
-			ArrayList<Integer> tmp_ws = new ArrayList<Integer>();
-			ws_sp[1] = ws_sp[1].substring(1, ws_sp[1].length()-1);
-			String [] a = ws_sp[1].split(",");
+		ArrayList<Integer> tmp_ws = new ArrayList<Integer>();
+		ws_sp[1] = ws_sp[1].substring(1, ws_sp[1].length()-1);
+		String [] a = ws_sp[1].split(",");
 			
-			for(String x:a){
-				try{
-
-					x = x.trim();
-					tmp_ws.add(Integer.parseInt(x));
-				}
-				catch(NumberFormatException e){
-					tmp_ws.add(0);
-				}
+		for(String x:a) {
+			try{
+				x = x.trim();
+				tmp_ws.add(Integer.parseInt(x));
 			}
-			paper.set_ws_stream_string(tmp_ws);
-			
-			
-			
-			ArrayList<Integer> tmp_Y = new ArrayList<Integer>();
-			Y_sp[1] = Y_sp[1].substring(1, Y_sp[1].length()-1);
-			
-			String [] b = Y_sp[1].split(",");
-			for(String x:b){
-				try{
-					x = x.trim();
-					tmp_Y.add(Integer.parseInt(x));
-				}
-				catch(NumberFormatException e){
-					if(x.equals("0"))tmp_Y.add(0);
-					else
-					e.printStackTrace();
-				}
+			catch(NumberFormatException e){
+				tmp_ws.add(0);
 			}
-			paper.set_Y_stream_string(tmp_Y);
+		}
+		paper.set_ws_stream_string(tmp_ws);
 			
-			paper.set_Auths(Auths_sp[1]);
-
+		ArrayList<Integer> tmp_Y = new ArrayList<Integer>();
+		Y_sp[1] = Y_sp[1].substring(1, Y_sp[1].length()-1);
 		
+		String [] b = Y_sp[1].split(",");
+		for(String x:b) {
+			try{
+				x = x.trim();
+				tmp_Y.add(Integer.parseInt(x));
+			}
+			catch(NumberFormatException e){
+				if(x.equals("0"))tmp_Y.add(0);
+				else
+					e.printStackTrace();
+			}
+		}
+		paper.set_Y_stream_string(tmp_Y);
+		paper.set_Auths(Auths_sp[1]);
 	}
 	
 }

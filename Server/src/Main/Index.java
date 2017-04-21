@@ -36,7 +36,12 @@ public class Index extends HttpServlet {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(
+			HttpServletRequest req,
+			HttpServletResponse resp) 
+			throws ServletException,
+					IOException 
+	{
 
 		ServletContext servletContext = getServletContext();
 		String saveDirectory = servletContext.getRealPath("/upload");
@@ -123,7 +128,12 @@ public class Index extends HttpServlet {
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(
+			HttpServletRequest req,
+			HttpServletResponse resp)
+			throws ServletException,
+					IOException 
+	{
 		req.setAttribute("g", 1000);
 		req.setAttribute("ids", "server1");
 		req.setAttribute("ssk", ssk);
