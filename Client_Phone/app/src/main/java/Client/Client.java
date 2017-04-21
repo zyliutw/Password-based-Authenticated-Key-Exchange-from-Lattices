@@ -200,7 +200,7 @@ public class Client extends ContextWrapper {
 		encrypt(pubKey, prng, toEnc, getFilesDir().getPath() + "/encry");
 
 	}
-	
+
 
 	public void set_ws_stream_string(
 			ArrayList<Integer> s) 
@@ -224,6 +224,7 @@ public class Client extends ContextWrapper {
 
 		Y = new PolyModElement<>(Rq, Y_arraylist);
 	}
+
 
 	public void set_Auths(
 			String s) 

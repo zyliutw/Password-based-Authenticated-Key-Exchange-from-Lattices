@@ -44,13 +44,11 @@ public class HttpUtil {
 		builder.addTextBody("pw", pw);
 		
 		HttpEntity entity = builder.build();
-
-			post.setEntity(entity);
-
-			HttpResponse response = client.execute(post);
-			response.getEntity().getContent();
-			String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
+        post.setEntity(entity);
+        HttpResponse response = client.execute(post);
+		response.getEntity().getContent();
+		String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
 	   
-			return responseString;
+		return responseString;
 	}
 }

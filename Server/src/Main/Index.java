@@ -42,7 +42,6 @@ public class Index extends HttpServlet {
 			throws ServletException,
 					IOException 
 	{
-
 		ServletContext servletContext = getServletContext();
 		String saveDirectory = servletContext.getRealPath("/upload");
 

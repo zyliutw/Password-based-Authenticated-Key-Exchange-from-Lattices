@@ -23,7 +23,6 @@ public class PublicKey extends HttpServlet {
 			throws ServletException,
 					IOException 
 	{
-
 		ServletContext servletContext = getServletContext();
 
 		File pkfile = new File(servletContext.getRealPath("/download/pubKey"));
