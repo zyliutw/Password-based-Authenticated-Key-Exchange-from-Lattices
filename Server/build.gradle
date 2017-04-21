@@ -1,0 +1,58 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse-wtp'
+ 
+sourceCompatibility = 1.8   // 設置 JDK 版本
+webAppDirName = 'WebContent'    // 設置 WebApp 根目錄
+sourceSets.main.java.srcDir 'src'   // 設置 Java 源碼所在目錄
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+
+// 設置依賴
+dependencies {
+   
+    compile files('libs/commons-io-2.5.jar')
+    compile files('libs/javax.servlet-api-3.1.0.jar')
+    compile files('libs/commons-fileupload-1.3.2.jar')
+	compile files('libs/httpclient-4.5.3.jar')
+	compile files('libs/httpclient-win-4.5.3.jar')
+	compile files('libs/httpcore-4.4.6.jar')
+	compile files('libs/httpmime-4.5.3.jar')
+    compile files('libs/jlbc.field.base.jar')
+    compile files('libs/jlbc.field.poly.jar')
+    compile files('libs/jlbc.field.vector.jar')
+    compile files('libs/jlbc.sampler.gpv08.jar')
+    compile files('libs/jNeo.digest.jar')
+    compile files('libs/jNeo.inputstream.jar')
+    compile files('libs/jNeo.jar')
+    compile files('libs/jNeo.math.jar')
+    compile files('libs/jNeo.ntruencrypt.encoder.jar')
+    compile files('libs/jNeo.ntruencrypt.jar')
+    compile files('libs/jpbc.jar')
+    compile files('libs/jpbc-api-2.0.0.jar')
+    compile files('libs/jpbc-benchmark-2.0.0.jar')
+    compile files('libs/jpbc-crypto-2.0.0.jar')
+    compile files('libs/jpbc-mm-2.0.0.jar')
+    compile files('libs/jpbc-pbc-2.0.0.jar')
+    compile files('libs/jpbc-plaf-2.0.0.jar')
+    compile files('libs/proguard.jar')
+    compile files('libs/proguardgui.jar')
+    compile files('libs/regexp.shared.jar')
+    compile files('libs/requestfactory-apt.jar')
+    compile files('libs/requestfactory-apt-src.jar')
+    compile files('libs/requestfactory-client+src.jar')
+    compile files('libs/requestfactory-client.jar')
+    compile files('libs/requestfactory-client-src.jar')
+    compile files('libs/requestfactory-server+src.jar')
+    compile files('libs/requestfactory-server.jar')
+    compile files('libs/requestfactory-server-src.jar')
+    compile files('libs/retrace.jar')
+    compile files('libs/securityinnovation.testvectors.jar')
+    compile files('libs/streamer.client.impl.jar')
+    compile files('libs/streamer.client.jar')
+    compile files('libs/testvectors.jar')
+    compile files('libs/validation-api-1.0.0.GA.jar')
+    compile files('libs/validation-api-1.0.0.GA-sources.jar')
+}
+ 

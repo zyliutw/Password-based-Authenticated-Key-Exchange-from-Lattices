@@ -1,0 +1,92 @@
+apply plugin: 'com.android.application'
+
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
+    defaultConfig {
+        applicationId "liutzuyuan.client_phone"
+        minSdkVersion 25
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        jackOptions {
+            enabled true
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    useLibrary 'org.apache.http.legacy'
+
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
+    compile('org.apache.httpcomponents:httpmime:4.3') {
+        exclude module: "httpclient"
+    }
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    testCompile 'junit:junit:4.12'
+    compile files('libs/client.impl.jar')
+    compile files('libs/jlbc.field.base.jar')
+    compile files('libs/jlbc.field.poly.jar')
+    compile files('libs/jlbc.field.vector.jar')
+    compile files('libs/jlbc.sampler.gpv08.jar')
+    compile files('libs/jNeo.digest.jar')
+    compile files('libs/jNeo.inputstream.jar')
+    compile files('libs/jNeo.jar')
+    compile files('libs/jNeo.math.jar')
+    compile files('libs/jNeo.ntruencrypt.encoder.jar')
+    compile files('libs/jNeo.ntruencrypt.jar')
+    compile files('libs/jpbc.jar')
+    compile files('libs/jpbc-api-2.0.0.jar')
+    compile files('libs/jpbc-benchmark-2.0.0.jar')
+    compile files('libs/jpbc-crypto-2.0.0.jar')
+    compile files('libs/jpbc-mm-2.0.0.jar')
+    compile files('libs/jpbc-pbc-2.0.0.jar')
+    compile files('libs/jpbc-plaf-2.0.0.jar')
+    compile files('libs/proguard.jar')
+    compile files('libs/proguardgui.jar')
+    compile files('libs/regexp.shared.jar')
+    compile files('libs/requestfactory-apt.jar')
+    compile files('libs/requestfactory-apt-src.jar')
+    compile files('libs/requestfactory-client+src.jar')
+    compile files('libs/requestfactory-client.jar')
+    compile files('libs/requestfactory-client-src.jar')
+    compile files('libs/requestfactory-server+src.jar')
+    compile files('libs/requestfactory-server.jar')
+    compile files('libs/requestfactory-server-src.jar')
+    compile files('libs/retrace.jar')
+    compile files('libs/securityinnovation.testvectors.jar')
+    compile files('libs/streamer.client.impl.jar')
+    compile files('libs/streamer.client.jar')
+    compile files('libs/testvectors.jar')
+    compile files('libs/validation-api-1.0.0.GA.jar')
+    compile files('libs/validation-api-1.0.0.GA-sources.jar')
+    }
