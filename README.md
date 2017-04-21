@@ -1,7 +1,7 @@
-# Lattice-Based-PAKE-Key-Exchange
+# Password-based Authenticated Key Exchange from Lattices
 
 ## Introduction
-This project implement Lattice Based PAKE Key Exchange based on 
+This project implements Password-based Authenticated Key Exchange protocol from Lattice based on 
 
 ## Project Structure
 ```
