@@ -126,9 +126,6 @@ public class Client {
 		String toEnc = hexString + "" +Nonce.toString();
 		encrypt(pubKey, prng, toEnc , "encry");
 	}
-	   
-	
-	
 	
 	
 	public void set_ws_stream_string(
