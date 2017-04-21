@@ -12,7 +12,7 @@ Lattice-Based-PAKE-Key-Exchange
 ```
 
 ## Run
-#### All projects are able to be build with gradle
+### All sub-projects can be build with gradle
 #### Step 1 
 Run Server with tomcat first
 #### Step 2
@@ -28,5 +28,5 @@ This project follows NTRU open source project, use GPLv3 License
 
 ## Library Reference
 1. [NTRUEncrypt](https://github.com/NTRUOpenSourceProject/ntru-crypto)
-2. [Java Lattice Based Cryptography Library (jLBC)](http://gas.dia.unisa.it/projects/jlbc/)
+2. [Java Lattice Based Cryptography Library (JLBC)](http://gas.dia.unisa.it/projects/jlbc/)
 3. [Java Pairing Based Cryptography Library (JPBC)](http://gas.dia.unisa.it/projects/jpbc/#.WPhieVOGOV4)
