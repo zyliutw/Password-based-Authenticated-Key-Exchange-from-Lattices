@@ -185,7 +185,6 @@ public class Client {
         
         Kc = t_alpha.mul(t_Y).add(t_rc.mul(2));
         String rhoc = Extr(Kc, ws);
-        md = MessageDigest.getInstance("SHA-256");
         String IDc_IDs_X_Y_ws_Nonce_rhos = "" + idc + ids + X.toString() + Y.toString() + ws.toString() + Nonce.toString() + rhoc;
         
         return getHash(IDc_IDs_X_Y_ws_Nonce_rhos);
@@ -307,7 +306,6 @@ public class Client {
             }
             hexString.append(hex);
         }
-
         return hexString.toString();
     }
 }

@@ -52,14 +52,12 @@ public class Server_Calculate {
     public ArrayList<Integer> ws;
     public int g;
     public String pw;
-
+    
+    public MessageDigest md;
+    public Map<String, String> idc_pw_map;
     private PolyModField<Field<Element>> Rq;
     private Sampler sampler;
-    public MessageDigest md;
-    
-    public Map<String, String> idc_pw_map;
 
-    
     
     public Server_Calculate() 
     {
@@ -76,11 +74,7 @@ public class Server_Calculate {
         if(!idc_pw_map.containsKey(idc)){
             return false;
         } else{
-            if(!idc_pw_map.get(idc).equals(pw)){
-                return false;
-            } else{
-                return true;
-            }
+            return !idc_pw_map.get(idc).equals(pw);
         }
     }
 
@@ -145,22 +139,10 @@ public class Server_Calculate {
 
     public Boolean checkHashValue() 
             throws NoSuchAlgorithmException,
-                    UnsupportedEncodingException 
+                    IOException 
     {
-        md = MessageDigest.getInstance("SHA-256");
-
-        String X_idc_pw_nonce = "" + X.toString() + idc + pw + Nonce + Integer.toString(g);
-        md.update(X_idc_pw_nonce.getBytes("UTF-8"));
-        byte[] digest = md.digest();
-
-        StringBuffer hexString = new StringBuffer();
-        for (int i = 0; i < digest.length; i++) {
-            String hex = Integer.toHexString(0xff & digest[i]);
-            if (hex.length() == 1)
-                hexString.append('0');
-            hexString.append(hex);
-        }
-        return hexString.toString().equals(client_Authc.substring(0, 64));
+    		String X_idc_pw_nonce = X.toString() + idc + pw + Nonce + Integer.toString(g);
+        return getHash(X_idc_pw_nonce).equals(client_Authc.substring(0, 64));
     }
 
 
@@ -200,53 +182,26 @@ public class Server_Calculate {
 
         Ks = t_beta.mul(t_X).add(t_rs.mul(2));
         ws = Signal_function(Ks);
-
         return ws;
     }
 
 
     public String serverCalsks() 
             throws NoSuchAlgorithmException,
-                    UnsupportedEncodingException 
+                    IOException 
     {
         String rhos = Extr(Ks, ws);
-
-        md = MessageDigest.getInstance("SHA-256");
         String IDc_IDs_X_Y_ws_Nonce_rhos = "" + idc + ids + X.toString() + Y.toString() + ws.toString() + Nonce + rhos;
-        md.update(IDc_IDs_X_Y_ws_Nonce_rhos.getBytes("UTF-8"));
-
-        byte[] digest = md.digest();
-        StringBuffer hexString = new StringBuffer();
-        for (int i = 0; i < digest.length; i++) {
-            String hex = Integer.toHexString(0xff & digest[i]);
-            if (hex.length() == 1)
-                hexString.append('0');
-            hexString.append(hex);
-        }
-        return hexString.toString();
-
+        return getHash(IDc_IDs_X_Y_ws_Nonce_rhos);
     }
 
     public String serverCalAuths() 
             throws NoSuchAlgorithmException,
-                    UnsupportedEncodingException 
+                    IOException 
     {
-
         md = MessageDigest.getInstance("SHA-256");
-        String Y_IDs_pw_ws_Nonce_plus1 = "" + Y.toString() + ids + pw + ws.toString() + Nonce + 1;
-        md.update(Y_IDs_pw_ws_Nonce_plus1.getBytes("UTF-8"));
-        byte[] digest = md.digest();
-
-        StringBuffer hexString = new StringBuffer();
-        for (int i = 0; i < digest.length; i++) {
-            String hex = Integer.toHexString(0xff & digest[i]);
-            if (hex.length() == 1)
-                hexString.append('0');
-            hexString.append(hex);
-        }
-
-        return hexString.toString();
-
+        String Y_IDs_pw_ws_Nonce_plus1 = Y.toString() + ids + pw + ws.toString() + Nonce + 1;
+        return getHash(Y_IDs_pw_ws_Nonce_plus1);
     }
 
 
@@ -345,13 +300,14 @@ public class Server_Calculate {
         return out;
     }
 
+    
     private static String Extr(
             Element K,
             ArrayList<Integer> ws)
     {
         String out = "";
-
         Vector k = (Vector) K;
+        
         for (int i = 0; i < k.getSize(); i++) {
             int a = (int) (((Integer.parseInt(k.getAt(i).toString()) + ws.get(i) * (q.intValue() - 1) / 2)
                     % q.intValue()) % 2);
@@ -383,5 +339,26 @@ public class Server_Calculate {
         FileOutputStream privFile = new FileOutputStream(privkeyFile);
         privFile.write(k.getPrivKey());
         privFile.close();
+    }
+    
+    
+    private String getHash(
+            String input)
+            throws IOException,
+                    NoSuchAlgorithmException
+    {
+        md = MessageDigest.getInstance("SHA-256");
+        md.update(input.getBytes("UTF-8"));
+        byte[] digest = md.digest();
+
+        StringBuilder hexString = new StringBuilder();
+        for (int i : digest) {
+            String hex = Integer.toHexString(0xff & i);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 }
