@@ -1,7 +1,7 @@
 # Password-based Authenticated Key Exchange from Lattices
 
 ## Introduction
-This project implements Password-based Authenticated Key Exchange protocol from Lattice based on 
+This project implements the protocol based on paper : Password-based Authenticated Key Exchange from Lattices for Client/Server Model, Futuretech, 2017
 
 ## Project Structure
 ```
