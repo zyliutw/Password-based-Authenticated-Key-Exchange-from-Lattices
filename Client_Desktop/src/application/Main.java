@@ -144,6 +144,7 @@ public class Main extends Application {
             String input) 
             throws IOException
     {
+    	System.out.println(input);
         String [] s = input.split("!");
         String [] ws_sp = s[0].split(":");
         String [] Y_sp = s[1].split(":");

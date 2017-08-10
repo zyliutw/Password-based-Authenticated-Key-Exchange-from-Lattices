@@ -69,12 +69,13 @@ public class Server_Calculate {
     }
 
 
-    public Boolean checkpw(String idc, String pw)
+    // Check the pw / idc if exist the server
+    public Boolean checkpwidc(String idc, String pw)
     {
         if(!idc_pw_map.containsKey(idc)){
             return false;
         } else{
-            return !idc_pw_map.get(idc).equals(pw);
+            return idc_pw_map.get(idc).equals(pw);
         }
     }
 

@@ -27,11 +27,7 @@ import com.securityinnovation.jNeo.NtruException;
 @WebServlet(name = "Index", urlPatterns = { "/index" })
 public class Index extends HttpServlet {
 
-    private String pw;
-    private String idc;
-    private String Auths;
-    private ArrayList<Integer> Y;
-    private ArrayList<Integer> ws;
+    // secret sharing key
     private String ssk;
     
     @SuppressWarnings("unchecked")
@@ -42,25 +38,34 @@ public class Index extends HttpServlet {
             throws ServletException,
                     IOException 
     {
-        ServletContext servletContext = getServletContext();
-        String saveDirectory = servletContext.getRealPath("/upload");
-
+    	
+    	String pw = null;
+        String idc = null;
+        String Auths = null;
+        ArrayList<Integer> Y;
+        ArrayList<Integer> ws;
+        Server_Calculate calculate;
+        
+        String saveDirectory = getServletContext().getRealPath("/upload");
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
 
         try {
+        	// get post params
             List<FileItem> items = upload.parseRequest(new ServletRequestContext(req));
             Iterator<FileItem> iterator = items.iterator();
             while (iterator.hasNext()) {
                 FileItem item = (FileItem) iterator.next();
                 String name = item.getFieldName();
                 if (item.isFormField()) {
+                	// get the pw / idc value
                     if (name.equals("pw")) {
                         pw = item.getString();
                     } else if (name.equals("idc")) {
                         idc = item.getString();
                     }
                 } else {
+                	// store the file send from client
                     if (name.equals("X")) {
                         File uploadedFile = new File(saveDirectory, "X");
                         item.write(uploadedFile);
@@ -75,7 +80,7 @@ public class Index extends HttpServlet {
         }
 
         ObjectInputStream objInputStream = new ObjectInputStream(
-                new FileInputStream(servletContext.getRealPath("/upload/X")));
+                new FileInputStream(getServletContext().getRealPath("/upload/X")));
         ArrayList<Integer> X_data = null;
         try {
             X_data = (ArrayList<Integer>) objInputStream.readObject();
@@ -85,38 +90,36 @@ public class Index extends HttpServlet {
         }
         objInputStream.close();
 
-        Server_Calculate calculate = new Server_Calculate();
+        calculate = new Server_Calculate();
         
-        if(!calculate.checkpw(idc, pw)){
+        if(!calculate.checkpwidc(idc, pw)){
             resp.setContentType("application/text");
             resp.getWriter().print("pwreject");
         } else{
             calculate.init(pw,  idc,  X_data);
 
-            File pkFile = new File(servletContext.getRealPath("/WEB-INF/privKey"));
-            long pklen = pkFile.length();
-            InputStream privKey = servletContext.getResourceAsStream("/WEB-INF/privKey");
-
-            File enFile = new File(servletContext.getRealPath("/upload/encry"));
+            File skFile = new File(getServletContext().getRealPath("/WEB-INF/privKey"));
+            long sklen = skFile.length();
+            
+            InputStream pkFileInputStream = new FileInputStream(skFile);
+            File enFile = new File(getServletContext().getRealPath("/upload/encry"));
             DataInputStream enFileStream = new DataInputStream(new FileInputStream(enFile));
 
             try {
-                calculate.checkAuthcAndDec(privKey, pklen, enFileStream);
+                calculate.checkAuthcAndDec(pkFileInputStream, sklen, enFileStream);
 
                 if (!calculate.checkHashValue()) {
+                	
                     resp.setContentType("application/text");
                     resp.getWriter().print("reject");
                 } else {
+                	
                     Y = calculate.serverCalY();
                     ws = calculate.serverCalws();
-
-                
                     ssk = calculate.serverCalsks();
                     Auths = calculate.serverCalAuths();
-
                     resp.setContentType("application/text");
                     resp.getWriter().print("ws:" + ws + '!' + "Y:" + Y + "!" + "Auths:" + Auths);
-
                 }
             } catch (NtruException | NoSuchAlgorithmException e) {
                 e.printStackTrace();
