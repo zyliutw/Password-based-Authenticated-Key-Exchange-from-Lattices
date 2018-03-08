@@ -16,7 +16,7 @@ Lattice-Based-PAKE-Key-Exchange
 #### Step 1 
 Run Server with tomcat first
 #### Step 2
-Set up idc_pw_map table in Server project (Index.java)<br>
+Set up idc_pw_map table in Server project (Server_Calculate.java)<br>
 Run Server with Tomcat
 #### Step 3
 Set up Server url in Desktop / Phone (HttpUtil.java)<br>
